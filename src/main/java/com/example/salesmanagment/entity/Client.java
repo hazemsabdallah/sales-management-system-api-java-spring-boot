@@ -39,6 +39,6 @@ public class Client {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
+    @OneToMany(mappedBy = "client")
     private List<Sale> sales;
 }

@@ -39,9 +39,9 @@ public class Seller {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seller")
+    @OneToMany(mappedBy = "seller")
     private List<Product> products;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seller")
+    @OneToMany(mappedBy = "seller")
     private List<Sale> sales;
 }

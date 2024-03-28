@@ -1,6 +1,8 @@
 package com.example.salesmanagment.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.sql.Date;
@@ -17,18 +19,23 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank
     @Column(name = "name")
     private String name;
 
+    @NotBlank
     @Column(name = "description")
     private String description;
 
+    @NotNull
     @Column(name = "available_quantity")
     private int availableQuantity;
 
+    @NotNull
     @Column(name = "price")
     private double price;
 
+    @NotNull
     @Column(name = "creation_date")
     private Date creationDate;
 
@@ -40,6 +47,6 @@ public class Product {
     @JoinColumn(name = "seller_id")
     private Seller seller;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    @OneToMany(mappedBy = "product")
     private List<Sale> sales;
 }

@@ -1,6 +1,7 @@
 package com.example.salesmanagment.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.sql.Date;
@@ -16,12 +17,15 @@ public class Sale {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
     @Column(name = "creation_date")
     private Date creationDate;
 
+    @NotNull
     @Column(name = "total_price")
     private double totalPrice;
 
+    @NotNull
     @Column(name = "total_quantity")
     private int totalQuantity;
 
