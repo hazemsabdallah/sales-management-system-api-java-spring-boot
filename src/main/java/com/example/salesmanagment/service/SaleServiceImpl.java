@@ -1,7 +1,11 @@
 package com.example.salesmanagment.service;
 
+import com.example.salesmanagment.dao.ClientRepository;
+import com.example.salesmanagment.dao.ProductRepository;
 import com.example.salesmanagment.dao.SaleRepository;
-import com.example.salesmanagment.entity.Sale;
+import com.example.salesmanagment.dao.SellerRepository;
+import com.example.salesmanagment.dto.SaleDto;
+import com.example.salesmanagment.entity.*;
 import com.example.salesmanagment.exception.ResourceNotFoundException;
 import com.opencsv.CSVWriter;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,9 +22,21 @@ public class SaleServiceImpl implements SaleService{
 
     private final SaleRepository saleRepository;
 
+    private final ClientRepository clientRepository;
+
+    private final SellerRepository sellerRepository;
+
+    private final ProductRepository productRepository;
+
     @Autowired
-    public SaleServiceImpl(SaleRepository saleRepository) {
+    public SaleServiceImpl(SaleRepository saleRepository,
+                           ClientRepository clientRepository,
+                           SellerRepository sellerRepository,
+                           ProductRepository productRepository) {
         this.saleRepository = saleRepository;
+        this.clientRepository = clientRepository;
+        this.sellerRepository = sellerRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -36,15 +52,42 @@ public class SaleServiceImpl implements SaleService{
     }
 
     @Override
-    public Sale create(Sale sale) {
-        sale.setId(0L);
+    public Sale create(SaleDto saleDto) throws ResourceNotFoundException {
+        Sale sale = mapDtoToSale(saleDto);
+        sale.setCreationDate(new java.sql.Date(System.currentTimeMillis()));
+
         return saleRepository.save(sale);
     }
 
     @Override
-    public Sale update(Sale sale) throws ResourceNotFoundException {
-        Sale existingProduct = this.findById(sale.getId());
+    public Sale update(SaleDto saleDto) throws ResourceNotFoundException {
+        Sale existingProduct = this.findById(saleDto.getId());
+
+        Sale sale = mapDtoToSale(saleDto);
+        sale.setCreationDate(existingProduct.getCreationDate());
+
         return saleRepository.save(sale);
+    }
+
+    private Sale mapDtoToSale(SaleDto saleDto) throws ResourceNotFoundException {
+        Sale sale = new Sale(saleDto);
+
+        Seller seller = sellerRepository.findById(saleDto.getSellerId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Seller with id " + saleDto.getSellerId() + " is not found!"));
+        sale.setSeller(seller);
+
+        Client client = clientRepository.findById(saleDto.getClientId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Client with id " + saleDto.getClientId() + " is not found!"));
+        sale.setClient(client);
+
+        Product product = productRepository.findById(saleDto.getProductId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Product with id " + saleDto.getProductId() + " is not found!"));
+        sale.setProduct(product);
+
+        return sale;
     }
 
     @Override

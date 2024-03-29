@@ -1,5 +1,6 @@
 package com.example.salesmanagment.service;
 
+import com.example.salesmanagment.dto.SaleDto;
 import com.example.salesmanagment.entity.Sale;
 import com.example.salesmanagment.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,9 +15,9 @@ public interface SaleService {
 
     List<Sale> findAll();
 
-    Sale create(Sale sale);
+    Sale create(SaleDto saleDto) throws ResourceNotFoundException;
 
-    Sale update(Sale sale) throws ResourceNotFoundException;
+    Sale update(SaleDto saleDto) throws ResourceNotFoundException;
 
     void generateSalesReport(Date startDate, Date endDate, HttpServletResponse response) throws IOException;
 }

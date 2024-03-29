@@ -1,14 +1,15 @@
 package com.example.salesmanagment.entity;
 
+import com.example.salesmanagment.dto.ProductDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
 
     @Id
@@ -23,39 +25,44 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
-    @NotBlank
     @Column(name = "name")
     private String name;
 
-    @NotBlank
     @Column(name = "description")
     private String description;
 
-    @NotNull
     @Column(name = "available_quantity")
-    private int availableQuantity;
+    private Integer availableQuantity;
 
-    @NotNull
     @Column(name = "price")
-    private double price;
+    private Double price;
 
-    @NotNull
     @Column(name = "creation_date")
     private Date creationDate;
 
-
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "category_id")
     private ProductCategory category;
 
     @ToString.Exclude
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "seller_id")
     private Seller seller;
 
     @ToString.Exclude
     @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    private List<Sale> sales;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Sale> sales = new ArrayList<>();
+
+    public Product() {
+    }
+
+    public Product(ProductDto productDto) {
+        this.id = productDto.getId();
+        this.name = productDto.getName();
+        this. description = productDto.getDescription();
+        this.availableQuantity = productDto.getAvailableQuantity();
+        this.price = productDto.getPrice();
+    }
 }

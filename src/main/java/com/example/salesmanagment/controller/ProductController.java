@@ -1,5 +1,6 @@
 package com.example.salesmanagment.controller;
 
+import com.example.salesmanagment.dto.ProductDto;
 import com.example.salesmanagment.entity.Product;
 import com.example.salesmanagment.exception.ResourceNotFoundException;
 import com.example.salesmanagment.service.ProductService;
@@ -34,15 +35,16 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
-        return new ResponseEntity<>(productService.create(product), HttpStatus.CREATED);
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDto productDto) throws ResourceNotFoundException {
+        productDto.setId(0L);
+        return new ResponseEntity<>(productService.create(productDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@Valid @RequestBody Product product, @PathVariable Long id)
+    public ResponseEntity<Product> updateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Long id)
             throws ResourceNotFoundException {
-        product.setId(id);
-        return new ResponseEntity<>(productService.update(product), HttpStatus.OK);
+        productDto.setId(id);
+        return new ResponseEntity<>(productService.update(productDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

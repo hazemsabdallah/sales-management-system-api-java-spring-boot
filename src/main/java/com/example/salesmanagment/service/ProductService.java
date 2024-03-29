@@ -1,5 +1,6 @@
 package com.example.salesmanagment.service;
 
+import com.example.salesmanagment.dto.ProductDto;
 import com.example.salesmanagment.entity.Product;
 import com.example.salesmanagment.exception.ResourceNotFoundException;
 
@@ -11,9 +12,9 @@ public interface ProductService {
 
     List<Product> findAll();
 
-    Product create(Product product);
+    Product create(ProductDto productdto) throws ResourceNotFoundException;
 
-    Product update(Product product) throws ResourceNotFoundException;
+    Product update(ProductDto productDto) throws ResourceNotFoundException;
 
     void deleteById(Long id) throws ResourceNotFoundException;
 }
