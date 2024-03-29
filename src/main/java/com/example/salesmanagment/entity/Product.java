@@ -43,8 +43,7 @@ public class Product {
     @Column(name = "creation_date")
     private Date creationDate;
 
-    @ToString.Exclude
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private ProductCategory category;

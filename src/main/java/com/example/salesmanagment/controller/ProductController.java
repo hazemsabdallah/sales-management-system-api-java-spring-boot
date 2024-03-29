@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -21,25 +21,31 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/products")
+    @GetMapping
     public ResponseEntity<List<Product>> readProducts() {
         List<Product> products = productService.findAll();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @PostMapping("/products")
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> readProduct(@PathVariable Long id) throws ResourceNotFoundException {
+        Product product = productService.findById(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @PostMapping
     public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
         return new ResponseEntity<>(productService.create(product), HttpStatus.CREATED);
     }
 
-    @PutMapping("/products/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@Valid @RequestBody Product product, @PathVariable Long id)
             throws ResourceNotFoundException {
         product.setId(id);
         return new ResponseEntity<>(productService.update(product), HttpStatus.OK);
     }
 
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) throws ResourceNotFoundException {
         productService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

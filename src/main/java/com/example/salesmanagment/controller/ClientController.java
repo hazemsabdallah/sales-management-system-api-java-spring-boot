@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/clients")
 public class ClientController {
 
     private final ClientService clientService;
@@ -22,25 +22,31 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @GetMapping("/clients")
+    @GetMapping
     public ResponseEntity<List<Client>> readClients() {
         List<Client> clients = clientService.findAll();
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 
-    @PostMapping("/clients")
+    @GetMapping("/{id}")
+    public ResponseEntity<Client> readProduct(@PathVariable Long id) throws ResourceNotFoundException {
+        Client client = clientService.findById(id);
+        return new ResponseEntity<>(client, HttpStatus.OK);
+    }
+
+    @PostMapping
     public ResponseEntity<Client> createClient(@Valid @RequestBody Client client) {
         return new ResponseEntity<>(clientService.create(client), HttpStatus.CREATED);
     }
 
-    @PutMapping("/clients/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Client> updateClient(@Valid @RequestBody Client client, @PathVariable Long id)
             throws ResourceNotFoundException {
         client.setId(id);
         return new ResponseEntity<>(clientService.update(client), HttpStatus.OK);
     }
 
-    @DeleteMapping("/clients/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteClient(@PathVariable Long id) throws ResourceNotFoundException {
         clientService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

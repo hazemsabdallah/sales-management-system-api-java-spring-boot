@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/sales")
 public class SaleController {
 
     private final SaleService saleService;
@@ -22,18 +22,24 @@ public class SaleController {
         this.saleService = saleService;
     }
 
-    @GetMapping("/sales")
+    @GetMapping
     public ResponseEntity<List<Sale>> readSales() {
         List<Sale> products = saleService.findAll();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @PostMapping("/sales")
+    @GetMapping("/{id}")
+    public ResponseEntity<Sale> readProduct(@PathVariable Long id) throws ResourceNotFoundException {
+        Sale sale = saleService.findById(id);
+        return new ResponseEntity<>(sale, HttpStatus.OK);
+    }
+
+    @PostMapping
     public ResponseEntity<Sale> createSale(@Valid @RequestBody Sale sale) {
         return new ResponseEntity<>(saleService.create(sale), HttpStatus.CREATED);
     }
 
-    @PutMapping("/sales/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Sale> updateSale(@Valid @RequestBody Sale sale, @PathVariable Long id)
             throws ResourceNotFoundException {
         sale.setId(id);
