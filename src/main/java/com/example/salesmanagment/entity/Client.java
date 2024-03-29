@@ -6,12 +6,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
 import java.util.List;
 
 @Entity
 @Table(name = "client")
 @Getter
 @Setter
+@ToString
 public class Client {
 
     @Id
@@ -40,6 +43,7 @@ public class Client {
     @Column(name = "address")
     private String address;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "client")
     private List<Sale> sales;

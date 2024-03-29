@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
 import java.sql.Date;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @Table(name = "product")
 @Getter
 @Setter
+@ToString
 public class Product {
 
     @Id
@@ -40,16 +43,19 @@ public class Product {
     @Column(name = "creation_date")
     private Date creationDate;
 
+    @ToString.Exclude
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id")
     private ProductCategory category;
 
+    @ToString.Exclude
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Seller seller;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<Sale> sales;
