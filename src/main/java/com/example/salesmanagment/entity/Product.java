@@ -1,5 +1,6 @@
 package com.example.salesmanagment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -39,14 +40,17 @@ public class Product {
     @Column(name = "creation_date")
     private Date creationDate;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id")
     private ProductCategory category;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Seller seller;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<Sale> sales;
 }

@@ -2,10 +2,11 @@ package com.example.salesmanagment.service;
 
 import com.example.salesmanagment.dao.SaleRepository;
 import com.example.salesmanagment.entity.Sale;
+import com.example.salesmanagment.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SaleServiceImpl implements SaleService{
@@ -18,17 +19,26 @@ public class SaleServiceImpl implements SaleService{
     }
 
     @Override
+    public Sale findById(Long id) throws ResourceNotFoundException {
+        Optional<Sale> result = saleRepository.findById(id);
+        return result.orElseThrow(() ->
+                new ResourceNotFoundException("Sale with id " + id + " is not found!"));
+    }
+
+    @Override
     public List<Sale> findAll() {
-        return null;
+        return saleRepository.findAll();
     }
 
     @Override
     public Sale create(Sale sale) {
-        return null;
+        sale.setId(0L);
+        return saleRepository.save(sale);
     }
 
     @Override
-    public Sale update(Sale sale) {
-        return null;
+    public Sale update(Sale sale) throws ResourceNotFoundException {
+        Sale existingProduct = this.findById(sale.getId());
+        return saleRepository.save(sale);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.salesmanagment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -39,6 +40,7 @@ public class Client {
     @Column(name = "address")
     private String address;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "client")
     private List<Sale> sales;
 }

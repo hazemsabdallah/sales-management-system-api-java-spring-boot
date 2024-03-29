@@ -1,5 +1,6 @@
 package com.example.salesmanagment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -29,14 +30,17 @@ public class Sale {
     @Column(name = "total_quantity")
     private int totalQuantity;
 
+    @JsonIgnoreProperties({"mobileNo", "email", "address"})
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
 
+    @JsonIgnoreProperties({"mobileNo", "email", "address"})
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Seller seller;
 
+    @JsonIgnoreProperties({"description", "availableQuantity", "creationDate"})
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
